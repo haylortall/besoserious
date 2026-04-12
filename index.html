@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>be so serious</title>
+
+  <meta property="og:title" content="be so serious">
+  <meta property="og:description" content="click for a professionally dismissive response">
+  <meta property="og:image" content="preview.png">
+  <meta property="og:type" content="website">
+
+  <style>
+    :root{
+      --bg:#fff6fb;
+      --text:#201517;
+      --accent:#ff8fbc;
+      --card:#fffdfd;
+    }
+
+    *{ box-sizing:border-box; }
+
+    html, body{
+      margin:0;
+      width:100%;
+      height:100%;
+    }
+
+    body{
+      background:var(--bg);
+      color:var(--text);
+      font-family: Georgia, "Times New Roman", serif;
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      cursor:pointer;
+    }
+
+    .wrap{
+      width:min(680px, calc(100vw - 32px));
+      text-align:center;
+      padding:24px 18px 44px;
+      position:relative;
+      z-index:2;
+    }
+
+    h1{
+      margin:0 0 8px;
+      font-size:clamp(2.6rem, 8vw, 5rem);
+      line-height:.95;
+      letter-spacing:-0.05em;
+    }
+
+    .sub{
+      margin:0 0 22px;
+      font-size:1rem;
+      opacity:.75;
+    }
+
+    .card{
+      margin:0 auto;
+      max-width:520px;
+      min-height:148px;
+      background:var(--card);
+      border:2px solid var(--text);
+      border-radius:28px;
+      display:grid;
+      place-items:center;
+      padding:24px 20px;
+      box-shadow:8px 8px 0 var(--accent);
+    }
+
+    #line{
+      font-size:clamp(1.35rem, 3vw, 1.9rem);
+      line-height:1.25;
+      text-wrap:balance;
+    }
+
+    .controls{
+      margin-top:18px;
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+
+    button{
+      appearance:none;
+      border:2px solid var(--text);
+      background:#fff;
+      color:var(--text);
+      font:inherit;
+      font-size:1rem;
+      padding:10px 16px;
+      border-radius:999px;
+      cursor:pointer;
+      box-shadow:0 4px 0 rgba(32,21,23,.12);
+    }
+
+    button:hover{
+      background:var(--text);
+      color:#fff;
+    }
+
+    .tiny{
+      margin-top:16px;
+      font-size:.9rem;
+      opacity:.7;
+    }
+
+    .floaty{
+      position:fixed;
+      pointer-events:none;
+      font-size:1.3rem;
+      animation:drift 1200ms ease-out forwards;
+      z-index:1;
+    }
+
+    @keyframes drift{
+      0%{ transform:translate(-50%,-50%) scale(.4) rotate(0deg); opacity:1; }
+      100%{ transform:translate(var(--x), var(--y)) scale(1.15) rotate(var(--r)); opacity:0; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap" id="screen">
+    <h1>be so serious</h1>
+    <p class="sub">click for a professionally dismissive response</p>
+
+    <section class="card">
+      <div id="line">click</div>
+    </section>
+
+    <div class="controls">
+      <button id="again">again</button>
+      <button id="copy">copy</button>
+    </div>
+
+    <p class="tiny">♡ taylor</p>
+  </main>
+
+  <script>
+    const lines = [
+      "be so serious",
+      "absolutely not",
+      "that’s one approach",
+      "interesting choice",
+      "not ideal for you",
+      "thank you for your time",
+      "i’ll allow myself a moment",
+      "difficult news for the community",
+      "congratulations on that",
+      "now why would you do that",
+      "this has been reviewed",
+      "brave, unfortunately",
+      "understood. against my wishes",
+      "i reject the premise",
+      "i need a second",
+      "you really went with that",
+      "not my favorite development",
+      "certainly a tone",
+      "this changed nothing",
+      "noted with concern",
+      "i see what happened here",
+      "that’s enough of that",
+      "i appreciate the warning",
+      "sadly, i noticed",
+      "there it is"
+    ];
+
+    const rare = [
+      "you’re confusing confidence with momentum",
+      "this is bigger than a bad take",
+      "i’ll be thinking about this against my will",
+      "i support your freedom to be wrong"
+    ];
+
+    const bits = ["✦","!","♡","★","…"];
+    const line = document.getElementById("line");
+    const again = document.getElementById("again");
+    const copy = document.getElementById("copy");
+
+    function pickLine(){
+      const chosen = Math.floor(Math.random() * 25) === 0
+        ? rare[Math.floor(Math.random() * rare.length)]
+        : lines[Math.floor(Math.random() * lines.length)];
+      line.textContent = chosen;
+      return chosen;
+    }
+
+    function sparkle(x, y){
+      for(let i = 0; i < 7; i++){
+        const el = document.createElement("div");
+        el.className = "floaty";
+        el.textContent = bits[Math.floor(Math.random() * bits.length)];
+        el.style.left = x + "px";
+        el.style.top = y + "px";
+        el.style.setProperty("--x", (Math.random() * 180 - 90) + "px");
+        el.style.setProperty("--y", (Math.random() * 180 - 130) + "px");
+        el.style.setProperty("--r", (Math.random() * 160 - 80) + "deg");
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 1200);
+      }
+    }
+
+    function refresh(x = window.innerWidth / 2, y = window.innerHeight / 2){
+      pickLine();
+      sparkle(x, y);
+    }
+
+    document.body.addEventListener("click", (e) => {
+      if(e.target.tagName === "BUTTON") return;
+      refresh(e.clientX, e.clientY);
+    });
+
+    again.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const rect = again.getBoundingClientRect();
+      refresh(rect.left + rect.width / 2, rect.top);
+    });
+
+    copy.addEventListener("click", async (e) => {
+      e.stopPropagation();
+      try{
+        await navigator.clipboard.writeText(line.textContent);
+        copy.textContent = "copied";
+        setTimeout(() => copy.textContent = "copy", 900);
+      }catch{
+        copy.textContent = "please just manually copy";
+        setTimeout(() => copy.textContent = "copy", 1200);
+      }
+      const rect = copy.getBoundingClientRect();
+      sparkle(rect.left + rect.width / 2, rect.top);
+    });
+  </script>
+</body>
+</html>
